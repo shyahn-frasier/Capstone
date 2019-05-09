@@ -165,6 +165,8 @@ def play(player, deck):
                 p.add_card(deck.deal_card())
                 p.isSplit = True
                 play(p, deck)
+        
+        if player.hand.point == player.
 
 
 def input_func(prompt, type_ = None, min_ = None, max_ = None, range_ = None):
