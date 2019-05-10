@@ -2,8 +2,8 @@ import random
 
 player_money = 1000
 chips = 0
-max_players = 8
-ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
+max_players = 4
+ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'JACK', 'QUEEN', 'KING', 'ACE']
 suits = ['SPADES', 'DIAMONDS', 'HEARTS', 'CLUBS']
 
 
@@ -12,9 +12,9 @@ class Card(object):
         self.suit = suit
         self.rank = rank
 
-        if rank == 'A':
+        if rank == 'ACE':
             self.point = 11
-        elif rank in ['J', 'Q', 'K']:
+        elif rank in ['JACK', 'QUEEN', 'KING']:
             self.point = 10
         else:
             self.point = int(rank)
@@ -34,7 +34,7 @@ class Card(object):
         self.hidden = False
 
     def is_ace(self):
-        return self.rank == 'A'
+        return self.rank == 'ACE'
 
 class Deck(object):
     def __init__(self):
@@ -83,7 +83,7 @@ class Dealer(Hand):
 
     def show_hand(self):
         for card in self.hand:
-            print(card,)
+            print(card)
         print
 
     def hit(self):
@@ -123,19 +123,25 @@ def play(player, deck):
         global chips
         if chips > player.bet and not player.isSplit:
             if player.hand[0].point == player.hand[1].point:
-                choice = input_func("Hit, Stand, DoubleDown, Split or Surrender? (h/s/d/p/u) ", str.lower,
-                                    range_=('h', 's', 'd', 'p', 'u'))
+                choice = input_func("Hit, Stand, Double, Split, or Surrender? (h/s/d/p/u) ", str.lower,
+                                    range_ =('h', 's', 'd', 'p', 'u'))
             else:
-                choice = input_func("Hit, Stand, DoubleDown or Surrender? (h/s/d/u) ", str.lower,
-                                    range_=('h', 's', 'd', 'u'))
+                choice = input_func("Hit, Stand, Double, or Surrender? (h/s/d/u) ", str.lower,
+                                    range_ =('h', 's', 'd', 'u'))
         else:
-            choice = input_func("Hit, Stand or Surrender? (h/s/u) ", str.lower, range_=('h', 's', 'u'))
+            choice = input_func("Hit, Stand or Surrender? (h/s/u) ", str.lower, range_ =('h', 's', 'u'))
         while choice == 'h':
             player.hit()
             player.show_hand()
             if player.get_value() > 21:
                 player.isBust = True
                 print("%s goes bust!" % player.name)
+                break
+            elif player.get_value() == 21:
+                player.stand()
+                break
+            elif player.get_value() == 21 and len(player.hand) == 2 and not player.isSplit:
+                player.stand()
                 break
             choice = input_func("Hit or Stand? (h/s) ", str.lower, range_=('h', 's'))
 
@@ -165,9 +171,6 @@ def play(player, deck):
                 p.add_card(deck.deal_card())
                 p.isSplit = True
                 play(p, deck)
-        
-        if player.hand.point == player.
-
 
 def input_func(prompt, type_ = None, min_ = None, max_ = None, range_ = None):
     value = ''
@@ -215,7 +218,7 @@ def game():
     global chips
     deck = Deck()
 
-    player_num = input_func("\nPlease enter the number of players: (1-8) ", int, 1, max_players)
+    player_num = input_func("\nPlease enter the number of players: (1-4) ", int, 1, max_players)
 
     print("\nLet's get started...\n")
 
