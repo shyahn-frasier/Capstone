@@ -196,20 +196,20 @@ def input_func(prompt, type_ = None, min_ = None, max_ = None, range_ = None):
 def report(player, dealer):
     global chips
     if player.isSurrender:
-        tag = 'surrender'
+        tag = 'Surrender'
     elif player.isBust:
-        tag = 'lose'
+        tag = 'Lose'
     elif len(player.hand) == 2 and player.get_value() == 21 and not player.isSplit:
-        tag = 'blackjack'
-        chips += player.bet * 3
+        tag = 'Blackjack'
+        chips += player.bet * 1.5
     elif dealer.isBust or (player.get_value() > dealer.get_value()):
-        tag = 'win'
+        tag = 'Win'
         chips += player.bet * 2
     elif player.get_value() == dealer.get_value():
-        tag = 'push'
+        tag = 'Push'
         chips += player.bet
     else:
-        tag = 'lose'
+        tag = 'Lose'
     print("%s: %-*s Balance = %d" % (player.name, 10, tag, chips))
 
 
@@ -272,8 +272,8 @@ if __name__ == '__main__':
         if chips < 1:
             print("You don't have enough chips to proceed. Game over.")
             break
-        proceed = input_func("Do you want to continue? (y/n) ", str.lower, range_ = ('y', 'n'))
-        if proceed == 'n':
+        proceed = input_func("Do you want to continue? (yes/no) ", str.lower, range_ = ('yes', 'no'))
+        if proceed == 'no':
             print("\nThank you for playing! See you next time.")
             break
 
