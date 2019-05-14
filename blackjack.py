@@ -123,14 +123,14 @@ def play(player, deck):
         global chips
         if chips > player.bet and not player.isSplit:
             if player.hand[0].point == player.hand[1].point:
-                choice = input_func("Hit, Stand, Double, Split, or Surrender? (h/s/d/p/u) ", str.lower,
-                                    range_ =('h', 's', 'd', 'p', 'u'))
+                choice = input_func("Hit, Stand, Double, Split, or Surrender? ", str.lower,
+                                    range_ =('hit', 'stand', 'double', 'split', 'surrender'))
             else:
-                choice = input_func("Hit, Stand, Double, or Surrender? (h/s/d/u) ", str.lower,
-                                    range_ =('h', 's', 'd', 'u'))
+                choice = input_func("Hit, Stand, Double, or Surrender? ", str.lower,
+                                    range_ =('hit', 'stand', 'double', 'surrender'))
         else:
-            choice = input_func("Hit, Stand or Surrender? (h/s/u) ", str.lower, range_ =('h', 's', 'u'))
-        while choice == 'h':
+            choice = input_func("Hit, Stand or Surrender? ", str.lower, range_ =('hit', 'stand', 'surrender'))
+        while choice == 'hit':
             player.hit()
             player.show_hand()
             if player.get_value() > 21:
@@ -143,12 +143,12 @@ def play(player, deck):
             elif player.get_value() == 21 and len(player.hand) == 2 and not player.isSplit:
                 player.stand()
                 break
-            choice = input_func("Hit or Stand? (h/s) ", str.lower, range_=('h', 's'))
+            choice = input_func("Hit or Stand? ", str.lower, range_=('hit', 'stand'))
 
-        if choice == 's':
+        if choice == 'stand':
             player.stand()
 
-        if choice == 'd':
+        if choice == 'double':
             chips -= player.bet
             player.bet *= 2
             print("New balance = %d" % chips)
@@ -156,12 +156,12 @@ def play(player, deck):
             player.show_hand()
             player.check_bust()
 
-        if choice == 'u':
+        if choice == 'surrender':
             player.isSurrender = True
             chips += (player.bet - player.bet / 2)
             print("New balance = %d" % chips)
 
-        if choice == 'p':
+        if choice == 'split':
             chips -= player.bet
             print("New balance = %d" % chips)
             player.split.append(Player(' Split_1', deck, player.bet))
@@ -232,7 +232,7 @@ def game():
             player = Player(player_name, deck, player_bet)
             players.append(player)
         else:
-            print("\nThe actual number of player is %d. There's no balance to support more players." % (len(players)))
+            print("\nThe actual number of players is %d. There's no balance to support more players." % (len(players)))
             break
 
     dealer = Dealer('Dealer', deck)
@@ -266,7 +266,7 @@ def game():
 
 if __name__ == '__main__':
 
-    chips= input_func("\nWelcome to Blackjack! Please enter the amount of chips you would like to use this round: (1-1000) ", int, 1, player_money)
+    chips= input_func("\nWelcome to Shyahn's Blackjack! Please enter the amount of chips you would like to use this round: (1-1000) ", int, 1, player_money)
     while True:
         game()
         if chips < 1:
@@ -277,9 +277,4 @@ if __name__ == '__main__':
             print("\nThank you for playing! See you next time.")
             break
 
-# Go through card-dealing process
-# Create point system matching each card, keeping in mind that aces can be 1 or 11
-# Make additional functions (split, stand, hit, double, surrender, push)
-# Make dealer rules (hit when at 17 points or below)
-# Make bust and blackjack function, using those for win/lose conditions
 # Detail insurance_wager()
